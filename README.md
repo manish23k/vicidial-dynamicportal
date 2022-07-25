@@ -13,3 +13,5 @@ cp vicidial-sss.conf /etc/httpd/conf.d/
 cd /servcies
 
 cp *.xml /usr/lib/firewalld/services/
+
+cp -r dynamicportal /var/www/html/
