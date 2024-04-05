@@ -1,5 +1,5 @@
 # vicidial-dynamicportal
-https://www.striker24x7.com/2022/11/how-to-scratch-install-vicidial-dynamic-portal-in-centos.html
+https://manishkadiya.blogspot.com/2024/04/debian-11-vicidial-scratch-install.html
 
 
 cp VB-firewall /usr/bin/
