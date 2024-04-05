@@ -1,4 +1,4 @@
-# vicidial-dynamicportal
+# vicidial-dynamic portal Debian 11
 https://manishkadiya.blogspot.com/2024/04/debian-11-vicidial-scratch-install.html
 
 
