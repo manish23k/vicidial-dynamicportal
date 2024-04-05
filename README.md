@@ -9,6 +9,7 @@ chmod +x /usr/bin/VB-firewall
 cp -r zones /etc/firewalld/
 
 cp vicidial-ssl.conf /etc/apache2/sites-available/
+
 cp vicidial.conf /etc/apache2/sites-available
 
 cd /servcies
