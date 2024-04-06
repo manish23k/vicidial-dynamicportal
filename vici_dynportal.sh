@@ -60,9 +60,7 @@ sed -i 's/badips/blackips/g' /usr/bin/VB-firewall
 sed -i 's/badnets/blacknets/g' /usr/bin/VB-firewall
 sed -i 's/viciblack/ViciBlack/g' /usr/bin/VB-firewall
 
-# Restart Firewalld
-systemctl enable firewalld
-systemctl restart firewalld || display_error "Failed to restart Firewalld"
+
 
 mysql -e "use asterisk;  INSERT INTO `vicidial_ip_lists` (`ip_list_id`, `ip_list_name`, `active`, `user_group`) VALUES
 ('ViciWhite',	'ViciWhite',	'Y',	'ADMIN'),
@@ -91,4 +89,9 @@ mysql -e "use asterisk; INSERT INTO `vicidial_ip_list_entries` (`ip_list_id`, `i
 (crontab -l 2>/dev/null; echo "0 */6 * * * /usr/local/bin/VB-firewall.pl --voipbl --noblack --flush –quiet") | crontab -
 
 echo "Vicidial Dynamic Portal setup completed successfully."
-echo "Make sure to configure Vicidial settings and IP lists manually through the Admin portal."
+echo "Make sure to you have configure your IP in the Vicidial whitelist ADMIN IP List." 
+echo "if Yes then only enable and start firewalld"
+
+# Restart Firewalld
+systemctl enable firewalld
+systemctl restart firewalld || display_error "Failed to restart Firewalld"
