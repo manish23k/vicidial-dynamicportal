@@ -102,4 +102,25 @@
     <service name="asterisk"/>
     <accept/>
   </rule>
+  <!--Added Mysql for dynamiclists its requred in Cluster setup-->
+  <rule family="ipv4">
+    <source ipset="blackips"/>
+    <service name="mysql"/>
+    <accept/>
+  </rule>
+  <rule family="ipv4">
+    <source ipset="whiteips"/>
+    <service name="mysql"/>
+    <accept/>
+  </rule>
+  <rule family="ipv4">
+    <source ipset="whitenets"/>
+    <service name="mysql"/>
+    <accept/>
+  </rule>
+  <rule family="ipv4">
+    <source ipset="dynamiclist"/>
+    <service name="mysql"/>
+    <accept/>
+  </rule>
 </zone>
