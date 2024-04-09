@@ -6,24 +6,6 @@
   <service name="viciportal-ssl"/>
   <service name="viciportal"/>
   <service name="rtp"/>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="ssh"/>
-    <accept/>
-  </rule>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="viciportal"/>
-    <accept/>
-  </rule>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="viciportal-ssl"/>
-    <accept/>
-  </rule>
   <rule family="ipv4">
     <source ipset="whiteips"/>
     <service name="ssh"/>
