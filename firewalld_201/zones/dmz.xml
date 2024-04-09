@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>DMZ</short>
+  <description>For computers in your demilitarized zone that are publicly-accessible with limited access to your internal network. Only selected incoming connections are accepted.</description>
+  <service name="ssh"/>
+  <service name="dynportal"/>
+  <service name="dynportal-ssl"/>
+  <service name="apache2"/>
+  <service name="apache2-ssl"/>
+  <service name="asterisk"/>
+  <service name="mysql"/>
+  <service name="rtp"/>
+  <service name="rtsp"/>
+  <service name="sip"/>
+  <service name="vsftpd"/>
+</zone>
