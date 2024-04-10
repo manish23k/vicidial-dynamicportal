@@ -19,19 +19,21 @@ apt update || display_error "Failed to update package list"
 apt install -y firewalld ipset unzip || display_error "Failed to install required packages"
 
 # Download and extract Dynamic Portal files
-mkdir -p /usr/src/dynamicportal
-cd /usr/src/dynamicportal || display_error "Failed to change directory to /usr/src/dynamicportal"
-wget https://github.com/manish23k/vicidial-dynamicportal/archive/refs/heads/main.zip || display_error "Failed to download Dynamic Portal files"
+mkdir -p /usr/src/
+cd /usr/src/ || display_error "Failed to change directory to /usr/src/dynamicportal"
+wget https://github.com/manish23k/vicidial-dynamicportal.git || display_error "Failed to download Dynamic Portal files"
 unzip main.zip || display_error "Failed to extract Dynamic Portal files"
-cd vicidial-dynamicportal-main || display_error "Failed to change directory to vicidial-dynamicportal-main"
+cd vicidial-dynamicportal || display_error "Failed to change directory to vicidial-dynamicportal-main"
 
 # Copy Firewall zones, services, ipset rules
+cd firewalld_201
 cp -r zones /etc/firewalld/
 cp -r ipsets /etc/firewalld/
-cp services/*.xml /usr/lib/firewalld/services/
+cd ..
+cp services/ /usr/lib/firewalld/
 
 # Copy Dynamic Portal files to web folder
-cp -r dynamicportal /var/www/html/dynportal
+cp -r dynportal_201 /var/www/html/dynportal
 
 # Copy ssl file to http config folder
 cp vicidial-ssl.conf /etc/apache2/sites-enabled
@@ -39,7 +41,7 @@ cp vicidial-ssl.conf /etc/apache2/sites-enabled
 cp vicidial.conf /etc/apache2/sites-enabled
 
 # Edit vicidial-ssl.conf with SSL certificate and key
-#sed -i "s#/etc/letsencrypt/live/$domain_name/fullchain.pem#" /etc/apache2/sites-available/vicidial-ssl.conf
+sed -i "s#/etc/letsencrypt/live/$domain_name/fullchain.pem#" /etc/apache2/sites-available/vicidial-ssl.conf
 sed -i "s#/etc/letsencrypt/live/$domain_name/privkey.pem#" /etc/apache2/sites-available/vicidial-ssl.conf
 
 # Add listen ports in Apache configuration
@@ -52,8 +54,8 @@ sudo a2ensite vicidial.conf
 sudo a2ensite vicidial-ssl.conf
 
 # Copy VB-firewall script to bin and set permissions
-cp VB-firewall /usr/bin/
-chmod +x /usr/bin/VB-firewall
+cp VB-firewall.pl /usr/bin/
+chmod +x /usr/bin/VB-firewall.pl
 
 #Patch Commmands for VB-firewall
 sed -i 's/badips/blackips/g' /usr/bin/VB-firewall
@@ -67,16 +69,16 @@ mysql -e "use asterisk;  INSERT INTO `vicidial_ip_lists` (`ip_list_id`, `ip_list
 ('ViciBlack',	'ViciBlack',	'Y',	'ADMIN');
 
 mysql -e "use asterisk; INSERT INTO `vicidial_ip_list_entries` (`ip_list_id`, `ip_address`) VALUES
-('ViciBlack',	'110.227.253.25'),
+('ViciWhite',	'110.227.253.25'),
 ('ViciWhite',	'103.240.35.46');
 
 # Add cronjob entry to run VB-firewall every minute
-(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/VB-firewall --white --dynamic --quiet") | crontab -
-(crontab -l 2>/dev/null; echo "@reboot /usr/bin/VB-firewall --white --dynamic --quiet") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/VB-firewall.pl --white --dynamic --quiet") | crontab -
+(crontab -l 2>/dev/null; echo "@reboot /usr/bin/VB-firewall.pl --white --dynamic --quiet") | crontab -
 
 (crontab -l 2>/dev/null; echo "#Entry for ViciWhite and Dynamic Portal") | crontab -
-(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/VB-firewall --white --dynamic --quiet") | crontab -
-(crontab -l 2>/dev/null; echo "@reboot /usr/bin/VB-firewall --white --dynamic --quiet") | crontab -
+(crontab -l 2>/dev/null; echo "* * * * * /usr/bin/VB-firewall.pl --white --dynamic --quiet") | crontab -
+(crontab -l 2>/dev/null; echo "@reboot /usr/bin/VB-firewall.pl --white --dynamic --quiet") | crontab -
 
 
 (crontab -l 2>/dev/null; echo "#Entry for ViciBlack list") | crontab -
@@ -88,10 +90,15 @@ mysql -e "use asterisk; INSERT INTO `vicidial_ip_list_entries` (`ip_list_id`, `i
 (crontab -l 2>/dev/null; echo "@reboot /usr/local/bin/VB-firewall.pl --voipbl --noblack --quiet") | crontab -
 (crontab -l 2>/dev/null; echo "0 */6 * * * /usr/local/bin/VB-firewall.pl --voipbl --noblack --flush –quiet") | crontab -
 
+Use this for cluster Setup put this in WEB Server or where you install dynportal
+#/usr/bin/rsync -a  /tmp/*-tmp root@192.168.0.20:/tmp
+#* * * * * /usr/bin/rsync -a  /tmp/*-tmp root@192.168.0.20:/tmp
+
+
 echo "Vicidial Dynamic Portal setup completed successfully."
-echo "Make sure to you have configure your IP in the Vicidial whitelist ADMIN IP List." 
-echo "if Yes then only enable and start firewalld"
+echo "Make sure to you have configure your IP in the Vicidial whitelist IP List." 
+echo "if Yes then only enable and start firewalld, and also add certificate in /etc/apache2/site-enable/vicidial-ssl.conf if its not added."
 
 # Restart Firewalld
-systemctl enable firewalld
-systemctl restart firewalld || display_error "Failed to restart Firewalld"
+#systemctl enable firewalld
+#systemctl restart firewalld || display_error "Failed to restart Firewalld"
