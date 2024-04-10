@@ -54,6 +54,7 @@ sudo a2ensite vicidial.conf
 sudo a2ensite vicidial-ssl.conf
 
 # Copy VB-firewall script to bin and set permissions
+cd usr_share_vicibox-firewall_201
 cp VB-firewall.pl /usr/bin/
 chmod +x /usr/bin/VB-firewall.pl
 
