@@ -3,10 +3,10 @@
   <short>Public</short>
   <description>For use in public areas. You do not trust the other computers on networks to not harm your computer. Only selected incoming connections are accepted.</description>
 <!--  <service name="ssh"/> -->
-  <service name="viciportal-ssl"/>
-  <service name="viciportal"/>
+  <service name="dynportal"/>
+  <service name="dynportal-ssl"/>
   <service name="rtp"/>
-  <rule family="ipv4">
+    <rule family="ipv4">
     <source ipset="whiteips"/>
     <service name="ssh"/>
     <accept/>
@@ -19,12 +19,6 @@
   <rule family="ipv4">
     <source ipset="dynamiclist"/>
     <service name="ssh"/>
-    <accept/>
-  </rule>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="apache2"/>
     <accept/>
   </rule>
   <rule family="ipv4">
@@ -42,12 +36,6 @@
     <service name="apache2"/>
     <accept/>
   </rule>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="apache2-ssl"/>
-    <accept/>
-  </rule>
   <rule family="ipv4">
     <source ipset="whiteips"/>
     <service name="apache2-ssl"/>
@@ -61,12 +49,6 @@
   <rule family="ipv4">
     <source ipset="dynamiclist"/>
     <service name="apache2-ssl"/>
-    <accept/>
-  </rule>
-<!-- Blacklist -->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="asterisk"/>
     <accept/>
   </rule>
   <rule family="ipv4">
@@ -85,11 +67,6 @@
     <accept/>
   </rule>
   <!--Added Mysql for dynamiclists its requred in Cluster setup-->
-  <rule family="ipv4">
-    <source ipset="blackips"/>
-    <service name="mysql"/>
-    <accept/>
-  </rule>
   <rule family="ipv4">
     <source ipset="whiteips"/>
     <service name="mysql"/>
